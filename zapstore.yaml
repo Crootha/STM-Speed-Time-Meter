@@ -1,0 +1,38 @@
+# Popis vydání pro Zapstore (https://zapstore.dev/docs/publish).
+# APK si zsp vezme z vydání na GitHubu, metadata bere odtud – nic se nedotahuje z Google Play ani F-Droidu.
+repository: https://github.com/Crootha/STM-Speed-Time-Meter
+release_source: https://github.com/Crootha/STM-Speed-Time-Meter
+release_filter: '^v[0-9]+\.[0-9]+\.[0-9]+$'
+match: '\.apk$'
+
+name: Speed Time Meter
+summary: An interactive speedometer that shows how long one kilometre takes
+description: |
+  Speed and time per kilometre are two sides of the same coin, but the relation
+  is a hyperbola, not a straight line — and that is easy to misjudge.
+
+  Drag the needle, hold the accelerator or pick a preset, and the gauge shows
+  both numbers at once: km/h on the inner scale, time per kilometre on the blue
+  outer scale. A chart plots the whole curve, a short simulation drives one
+  kilometre in real time (or ten times faster), and a table gives the time for
+  100 m, 1 km, 10 km, a marathon and one long trip.
+
+  Going from 10 to 20 km/h saves three minutes on every kilometre.
+  Going from 100 to 110 km/h saves barely three seconds. That is the point.
+
+  - Czech, English and Spanish, each with local speed limits and routes
+  - Light and dark theme
+  - Works completely offline, no account, no tracking, no network access at all
+
+license: MIT
+tags: [education, science, reference]
+
+icon: ./icons/icon-512.png
+images:
+  - ./assets/screenshots/01-gauge-dark.png
+  - ./assets/screenshots/02-curve-drive-dark.png
+  - ./assets/screenshots/03-gauge-light-cs.png
+release_notes: ./CHANGELOG.md
+
+# Metadata píšeme sami, nic se nemá dotahovat odjinud.
+metadata_sources: []

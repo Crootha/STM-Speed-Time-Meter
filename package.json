@@ -1,0 +1,19 @@
+{
+  "name": "stm-speed-time-meter",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Tachometr kilometru – vztah rychlosti a času na ujetí 1 km.",
+  "license": "MIT",
+  "scripts": {
+    "test": "node tests/check.mjs",
+    "build": "node scripts/build-www.mjs",
+    "serve": "python3 -m http.server 8000",
+    "sync": "npm run build && cap sync android",
+    "android:apk": "npm run sync && cd android && ./gradlew assembleRelease"
+  },
+  "dependencies": {
+    "@capacitor/android": "^7.6.10",
+    "@capacitor/cli": "^7.6.10",
+    "@capacitor/core": "^7.6.10"
+  }
+}

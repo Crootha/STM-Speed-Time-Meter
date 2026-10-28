@@ -1,0 +1,11 @@
+{
+  "appId": "io.github.crootha.stm",
+  "appName": "Speed Time Meter",
+  "webDir": "www",
+  "android": {
+    "allowMixedContent": false
+  },
+  "server": {
+    "androidScheme": "https"
+  }
+}
