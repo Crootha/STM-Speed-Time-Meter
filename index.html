@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Tachometr kilometru</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Barlow:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="src/styles.css">
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="intro">
+      <h1 data-i="title">Tachometr kilometru</h1>
+      <p data-i="intro"></p>
+    </div>
+    <div class="switches">
+      <div class="seg" id="langSeg" role="group" aria-label="Language">
+        <button type="button" data-lang="cs">CZ</button><button type="button" data-lang="en">EN</button><button type="button" data-lang="es">ES</button>
+      </div>
+      <div class="seg" id="themeSeg" role="group">
+        <button type="button" data-theme-set="auto"></button><button type="button" data-theme-set="light"></button><button type="button" data-theme-set="dark"></button>
+      </div>
+    </div>
+  </header>
+
+  <div class="grid">
+    <section class="box" id="gaugeBox">
+      <svg id="gauge" viewBox="4 -6 392 392" role="img"></svg>
+      <p class="who" id="who" aria-live="polite"></p>
+      <div class="readouts">
+        <div class="ro spd"><div class="label" data-i="speed"></div><div class="v"><span id="vOut">50</span> <span class="u">km/h</span></div></div>
+        <div class="ro tim"><div class="label" data-i="kmIn"></div><div class="v"><span id="tOut"></span> <span class="u" id="tUnit"></span></div></div>
+        <div class="ro"><div class="label" data-i="perSec"></div><div class="v"><span id="msOut"></span> <span class="u">m</span></div></div>
+      </div>
+      <div class="controls">
+        <div class="slider"><span>0</span><input type="range" id="speed" min="0" max="200" step="1" value="50"><span>200</span></div>
+        <div class="pedals">
+          <button id="brake" type="button" data-i="brake"></button>
+          <button id="gas" type="button" data-i="gas"></button>
+        </div>
+        <p class="hint" data-i="pedalHint"></p>
+        <div class="presets" id="presets"></div>
+      </div>
+    </section>
+
+    <div class="right">
+      <section class="box">
+        <div class="label" data-i="curveTitle"></div>
+        <div class="formula" data-i="formula"></div>
+        <svg id="curve" viewBox="0 0 420 232" role="img"></svg>
+        <p class="hint" data-i="curveHint"></p>
+      </section>
+
+      <section class="box">
+        <div class="label" data-i="runTitle"></div>
+        <div class="road" aria-hidden="true">
+          <div class="lane"></div><div class="trail" id="trail"></div><div class="goal"></div>
+          <span class="km" style="left:16px">0 m</span>
+          <span class="km" style="left:50%">500 m</span>
+          <span class="km" style="left:calc(100% - 28px)">1 km</span>
+          <svg id="car" viewBox="0 0 46 22"><rect x="2" y="5" width="40" height="12" rx="4" style="fill:var(--needle)"/><rect x="24" y="7" width="10" height="8" rx="2" style="fill:var(--fg);opacity:.85"/><rect x="42" y="7" width="3" height="3" fill="#fff3c4"/><rect x="42" y="12" width="3" height="3" fill="#fff3c4"/><rect x="6" y="3" width="8" height="3" rx="1" style="fill:var(--fg)"/><rect x="6" y="16" width="8" height="3" rx="1" style="fill:var(--fg)"/><rect x="30" y="3" width="8" height="3" rx="1" style="fill:var(--fg)"/><rect x="30" y="16" width="8" height="3" rx="1" style="fill:var(--fg)"/></svg>
+        </div>
+        <div class="runstats">
+          <div><span class="label" data-i="covered"></span><b><span id="dist">0</span> m</b></div>
+          <div><span class="label" data-i="elapsed"></span><b id="elapsed">0:00</b></div>
+          <div><span class="label" data-i="toGo"></span><b id="eta">—</b></div>
+        </div>
+        <div class="runrow">
+          <button id="run" type="button"></button>
+          <button id="fast" type="button" aria-pressed="false" data-i="fast"></button>
+        </div>
+        <p class="hint" data-i="runHint"></p>
+      </section>
+
+      <section class="box">
+        <div class="label" data-i="tableTitle"></div>
+        <table id="dists"></table>
+      </section>
+    </div>
+  </div>
+</div>
+
+<script src="src/i18n.js"></script>
+<script src="src/app.js"></script>
+</body>
+</html>
