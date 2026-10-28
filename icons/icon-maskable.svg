@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Tachometr kilometru">
+  <rect width="512" height="512" fill="#0b1018"/>
+  <g transform="translate(256 256) scale(0.76) translate(-256 -256)">
+  <circle cx="256" cy="256" r="186" fill="#131b27" stroke="#26324a" stroke-width="4"/>
+  <path d="M149.93 362.07A150 150 0 1 1 362.07 362.07" fill="none" stroke="#1f2a3d" stroke-width="26" stroke-linecap="round"/>
+  <path d="M149.93 362.07A150 150 0 1 1 391.90 192.60" fill="none" stroke="#ffae1f" stroke-width="26" stroke-linecap="round"/>
+  <path d="M134.38 377.62A172 172 0 1 1 411.89 183.31" fill="none" stroke="#5fd3e8" stroke-width="5" opacity=".75"/>
+  <circle cx="411.89" cy="183.31" r="13" fill="#5fd3e8"/>
+  <path d="M243 262 L362 203 L249 282 Z" fill="#ffae1f"/>
+  <circle cx="256" cy="256" r="26" fill="#131b27" stroke="#ffae1f" stroke-width="9"/>
+  </g>
+</svg>

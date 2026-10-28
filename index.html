@@ -4,9 +4,15 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Tachometr kilometru</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Barlow:wght@400;500;600&display=swap">
+<meta name="description" content="Interaktivní tachometr, který ke každé rychlosti ukazuje, za jak dlouho ujedeš jeden kilometr. Graf, simulace jízdy a tabulka časů.">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#eef1f6" media="(prefers-color-scheme:light)">
+<meta name="theme-color" content="#0b1018" media="(prefers-color-scheme:dark)">
+<link rel="icon" href="favicon.ico" sizes="48x48">
+<link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icons/icon-180.png">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="stylesheet" href="src/fonts/fonts.css">
 <link rel="stylesheet" href="src/styles.css">
 </head>
 <body>
@@ -28,7 +34,7 @@
 
   <div class="grid">
     <section class="box" id="gaugeBox">
-      <svg id="gauge" viewBox="4 -6 392 392" role="img"></svg>
+      <svg id="gauge" viewBox="0 -10 400 400" role="img"></svg>
       <p class="who" id="who" aria-live="polite"></p>
       <div class="readouts">
         <div class="ro spd"><div class="label" data-i="speed"></div><div class="v"><span id="vOut">50</span> <span class="u">km/h</span></div></div>
@@ -85,5 +91,11 @@
 
 <script src="src/i18n.js"></script>
 <script src="src/app.js"></script>
+<script>
+/* Offline režim. Na file:// servisní worker není k dispozici, proto to hlídáme. */
+if("serviceWorker" in navigator&&location.protocol.startsWith("http")){
+  addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));
+}
+</script>
 </body>
 </html>

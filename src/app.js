@@ -19,7 +19,7 @@ const fmt=sec=>{const[a,b]=parts(sec);return b?`${a} ${b}`:a};
 const clock=sec=>{let m=Math.floor(sec/60),s=Math.floor(sec%60);return`${m}:${String(s).padStart(2,"0")}`};
 
 /* ---------- tachometr ---------- */
-const MAX=200,A0=135,SWEEP=270,CX=200,CY=190,R=150,NS="http://www.w3.org/2000/svg";
+const MAX=200,A0=135,SWEEP=270,CX=200,CY=190,R=150,RIM=R+48,NS="http://www.w3.org/2000/svg";
 let v=50,target=null;
 const $=id=>document.getElementById(id);
 const mk=(par,t,a,st)=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);if(st)e.setAttribute("style",st);par.appendChild(e);return e};
@@ -30,7 +30,7 @@ const g=$("gauge");
 const defs=mk(g,"defs",{});
 const rg=mk(defs,"radialGradient",{id:"face",cx:"50%",cy:"45%",r:"60%"});
 mk(rg,"stop",{offset:"0%"},"stop-color:var(--face1)");mk(rg,"stop",{offset:"100%"},"stop-color:var(--face2)");
-mk(g,"circle",{cx:CX,cy:CY,r:R+42,fill:"url(#face)","stroke-width":2},"stroke:var(--line)");
+mk(g,"circle",{cx:CX,cy:CY,r:RIM,fill:"url(#face)","stroke-width":2},"stroke:var(--line)");
 mk(g,"path",{d:arc(0,MAX,R),fill:"none","stroke-width":10,"stroke-linecap":"round"},"stroke:var(--track)");
 mk(g,"path",{d:arc(130,MAX,R),fill:"none","stroke-width":10,opacity:.45},"stroke:var(--hot)");
 const prog=mk(g,"path",{fill:"none","stroke-width":10,"stroke-linecap":"round"},"stroke:var(--needle);transition:stroke .2s");
@@ -110,7 +110,7 @@ function render(){
   $("vOut").textContent=r;$("tOut").textContent=tv;$("tUnit").textContent=tu;
   $("msOut").textContent=numFmt(1).format(r/3.6);
   $("speed").value=r;
-  $("who").textContent=L.who[whoIdx(r)];
+  const who=L.who[whoIdx(r)];if($("who").textContent!==who)$("who").textContent=who;
   const m=r>0?60/r:YMAX,X=cx(r),Y=cy(m);
   dot.setAttribute("cx",X);dot.setAttribute("cy",Y);
   gx.setAttribute("x1",X);gx.setAttribute("x2",X);gx.setAttribute("y1",Y);gx.setAttribute("y2",PB);
@@ -122,7 +122,7 @@ function render(){
 }
 
 /* ---------- ovládání ---------- */
-$("speed").addEventListener("input",e=>{v=+e.target.value;target=null;render()});
+$("speed").addEventListener("input",e=>{v=+e.target.value;target=null;render();drawRun()});
 let gas=false,brake=false;
 const hold=(id,set)=>{const b=$(id);
   const on=()=>{set(true);target=null;b.classList.add("held")},off=()=>{set(false);b.classList.remove("held")};
@@ -137,7 +137,7 @@ document.addEventListener("keydown",e=>{if(e.target.tagName==="INPUT")return;
 document.addEventListener("keyup",e=>{if(e.key==="ArrowUp"){gas=false;$("gas").classList.remove("held")}if(e.key==="ArrowDown"){brake=false;$("brake").classList.remove("held")}});
 let drag=false;
 function fromPointer(e){const p=g.createSVGPoint();p.x=e.clientX;p.y=e.clientY;const q=p.matrixTransform(g.getScreenCTM().inverse());
-  let a=Math.atan2(q.y-CY,q.x-CX)*180/Math.PI;a=(a-A0+720)%360;if(a>SWEEP)a=a>SWEEP+45?0:SWEEP;v=Math.round(a/SWEEP*MAX);target=null;render()}
+  let a=Math.atan2(q.y-CY,q.x-CX)*180/Math.PI;a=(a-A0+720)%360;if(a>SWEEP)a=a>SWEEP+45?0:SWEEP;v=Math.round(a/SWEEP*MAX);target=null;render();drawRun()}
 g.addEventListener("pointerdown",e=>{drag=true;try{g.setPointerCapture(e.pointerId)}catch(_){}fromPointer(e)});
 g.addEventListener("pointermove",e=>{if(drag)fromPointer(e)});
 ["pointerup","pointercancel"].forEach(ev=>g.addEventListener(ev,()=>drag=false));
@@ -149,11 +149,12 @@ $("run").onclick=()=>{if(running){running=false}else{if(dist>=1000){dist=0;elT=0
 $("fast").onclick=()=>{mult=mult===1?10:1;$("fast").setAttribute("aria-pressed",mult===10)};
 const road=document.querySelector(".road"),car=$("car");
 function drawRun(){
-  const w=road.clientWidth-44,x=16+w*dist/1000;
+  const w=Math.max(0,road.clientWidth-48),x=24+w*dist/1000;
   car.style.left=x+"px";$("trail").style.width=x+"px";
   $("dist").textContent=Math.floor(dist);$("elapsed").textContent=clock(elT);
   const r=Math.round(v);
-  $("eta").textContent=dist>=1000?"✓":(r>0?clock((1000-dist)/(r/3.6)):"—");
+  /* zaokrouhlit, ať z 30,0 s nevypadne kvůli plovoucí čárce 0:29 */
+  $("eta").textContent=dist>=1000?"✓":(r>0?clock(Math.round((1000-dist)/(r/3.6))):"—");
 }
 
 /* ---------- smyčka ---------- */
@@ -164,10 +165,12 @@ function loop(now){
   else if(brake){v=Math.max(0,v-60*dt);ch=true}
   else if(target!==null){const d=target-v;if(Math.abs(d)<.4){v=target;target=null}else v+=d*Math.min(1,dt*5);ch=true}
   if(ch)render();
+  const wasRunning=running;
   if(running){const st=dt*mult;dist+=Math.round(v)/3.6*st;elT+=st;if(dist>=1000){dist=1000;running=false;setRunLabel()}}
-  if(running||ch)drawRun();
+  if(wasRunning||ch)drawRun();
   requestAnimationFrame(loop);
 }
+addEventListener("blur",()=>{gas=brake=false;$("gas").classList.remove("held");$("brake").classList.remove("held")});
 applyTheme();applyLang();requestAnimationFrame(loop);
 addEventListener("resize",drawRun);
 })();
